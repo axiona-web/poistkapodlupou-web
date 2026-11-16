@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /recenzie-sprava/
+Disallow: /podmienky-sprava/
+Disallow: /pouzitie-sprava/
+Disallow: /narodeniny-sprava/
+Disallow: /podpis/
+Disallow: /audit-pilot/
+Disallow: /formular/
+
+Sitemap: https://poistkapodlupou.sk/sitemap.xml
