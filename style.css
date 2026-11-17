@@ -653,3 +653,4 @@ html .review-form-intro p,html .g-review-box p{font-size:15px}
 @media(min-width:701px){#bday-all.bday-box{max-width:none}.bday-table th,.bday-table td{white-space:nowrap;padding:10px 12px;vertical-align:middle}.bday-table .bday-owner-sel{width:auto;margin:0}.bday-table .btn{padding:5px 12px}}
 .bday-auto{margin:4px 0 10px;font-size:14px;line-height:1.6}.bday-auto p{margin:0 0 6px}.bday-auto .bday-chip{margin-left:6px}
 .footer-bottom a{color:inherit;text-decoration:underline;text-underline-offset:3px}.footer-bottom a:hover{color:#fff}
+.usage-acts{font-size:13px;line-height:1.5;min-width:260px}.usage-acts details{margin-top:4px}.usage-acts summary{cursor:pointer;color:var(--muted,#5b6b70)}.usage-stats td{font-size:14px}#usage-stats{margin:32px 0 24px}

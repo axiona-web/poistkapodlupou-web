@@ -35,7 +35,7 @@ async function toolExtract(file, type, say) {
  say('Čítam dokument…');
  const prepared = await prepareAuditFile(source);
  const data = await new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result.split(',')[1]); r.onerror = rej; r.readAsDataURL(prepared); });
- const r = await fetch(TOOL_API + '/public/extract', { method: 'POST', credentials: 'omit', signal: AbortSignal.timeout(80000), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, mime: prepared.type, data, consent: true, session: auditSession?.token }) });
+ const r = await fetch(TOOL_API + '/public/extract', { method: 'POST', credentials: 'omit', signal: AbortSignal.timeout(80000), headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, mime: prepared.type, data, consent: true, session: auditSession?.token, tool: 'nastroj' }) });
  if (!r.ok) { const d = await r.json().catch(() => ({})); if (d.error === 'unverified') saveSession(null); const e = Error(toolMsg(d.error, 'Dokument sa nepodarilo prečítať.')); e.code = d.error; throw e; }
  const out = await r.json(); if (!Array.isArray(out.fields)) throw Error('Dokument sa nepodarilo prečítať.');
  return out;
