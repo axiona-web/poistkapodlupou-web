@@ -95,4 +95,5 @@ document.addEventListener('click', event => {
   const choice = event.target.closest('[data-finportal-choice]');
   if (choice) applyCookieChoice(choice.dataset.finportalChoice === 'allow');
 });
-document.querySelector('#cookie-panel').hidden = privacyChoice !== null;
+// The birthday card loads no optional content, and the panel would cover its button on a phone.
+document.querySelector('#cookie-panel').hidden = privacyChoice !== null || location.pathname.startsWith('/gratulacia');

@@ -126,7 +126,11 @@ ${sprinkle(84,198,'#f2b84b',30)}${sprinkle(118,214,'#a9c3cc',-20)}${sprinkle(150
 ${candle(128)}${candle(160)}${candle(192)}</svg>`;
 }
 const GR_FROM={alexandra:{name:'Alexandra Čurillová',photo:'assets/alexandra-240.webp'},martin:{name:'Martin Dominik',photo:'assets/martin-480.webp'}};
-function greetingPage(){const k=new URLSearchParams(location.search).get('od');const f=k&&Object.hasOwn(GR_FROM,k)?GR_FROM[k]:GR_FROM.alexandra;return `<div class="page-shell wrap gr-page"><article class="gr-card"><div class="gr-stage">${grCake()}</div><h1>Všetko najlepšie<br><em>k narodeninám</em></h1><p class="gr-wish">Prajem Vám veľa zdravia, radosti a pokojných dní s ľuďmi, na ktorých Vám záleží.</p><div class="gr-actions"><p class="gr-step" aria-live="polite">Zavrite na chvíľu oči a v duchu si niečo zaželajte.</p><button class="btn gr-go" type="button">Mám želanie</button><p class="gr-after" hidden>Nech sa splní, čo ste si želali.<button type="button" class="gr-relight">Zapáliť znova</button></p></div><div class="gr-sign"><img src="${f.photo}" alt="" width="56" height="56"><div><b>${f.name}</b><span>Poistka pod Lupou</span></div></div></article></div>`}
+// What to do next, said plainly: people did not see that the card waits for a tap.
+const grTap=()=>window.matchMedia&&matchMedia('(hover: none)').matches?'ťuknite':'kliknite';
+const grStep1=()=>`Zavrite na chvíľu oči, v duchu si niečo zaželajte a potom ${grTap()} na tlačidlo.`;
+const grStep2=()=>`A teraz sfúknite sviečky: ${grTap()} na tlačidlo alebo priamo na tortu.`;
+function greetingPage(){const k=new URLSearchParams(location.search).get('od');const f=k&&Object.hasOwn(GR_FROM,k)?GR_FROM[k]:GR_FROM.alexandra;return `<div class="page-shell wrap gr-page"><article class="gr-card"><div class="gr-stage">${grCake()}</div><h1>Všetko najlepšie<br><em>k narodeninám</em></h1><p class="gr-wish">Prajem Vám veľa zdravia, radosti a pokojných dní s ľuďmi, na ktorých Vám záleží.</p><div class="gr-actions"><p class="gr-step" aria-live="polite">${grStep1()}</p><button class="btn gr-go" type="button">Mám želanie</button><p class="gr-after" hidden>Nech sa splní, čo ste si želali.<button type="button" class="gr-relight">Zapáliť znova</button></p></div><div class="gr-sign"><img src="${f.photo}" alt="" width="56" height="56"><div><b>${f.name}</b><span>Poistka pod Lupou</span></div></div></article></div>`}
 function grConfetti(){
  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
  const box=document.createElement('div');box.className='gr-confetti';box.setAttribute('aria-hidden','true');
@@ -138,9 +142,11 @@ function bindGreeting(){
  const page=document.querySelector('.gr-page'),chat=document.querySelector('#chat-toggle');
  if(chat)chat.style.display=page?'none':'';
  if(!page)return;const card=page.querySelector('.gr-card'),go=page.querySelector('.gr-go'),step=page.querySelector('.gr-step'),after=page.querySelector('.gr-after');
- const reset=()=>{card.classList.remove('gr-out','gr-ready');step.hidden=false;step.textContent='Zavrite na chvíľu oči a v duchu si niečo zaželajte.';go.textContent='Mám želanie';go.hidden=false;after.hidden=true;};
+ const reset=()=>{card.classList.remove('gr-out','gr-ready');step.hidden=false;step.textContent=grStep1();go.textContent='Mám želanie';go.hidden=false;after.hidden=true;};
  go.onclick=()=>{
-  if(!card.classList.contains('gr-ready')){card.classList.add('gr-ready');step.textContent='A teraz sfúknite sviečky.';go.textContent='Sfúknuť sviečky';return;}
+  if(!card.classList.contains('gr-ready')){card.classList.add('gr-ready');step.textContent=grStep2();go.textContent='Sfúknuť sviečky';return;}
   card.classList.add('gr-out');go.hidden=true;step.hidden=true;after.hidden=false;grConfetti();};
  page.querySelector('.gr-relight').onclick=()=>{reset();go.focus();};
+ page.querySelector('.gr-stage').onclick=()=>{if(!go.hidden)go.click();};
+ step.textContent=grStep1();
 }
