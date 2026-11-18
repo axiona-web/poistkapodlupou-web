@@ -658,3 +658,4 @@ html .review-form-intro p,html .g-review-box p{font-size:15px}
 @keyframes gr-pulse{0%,100%{box-shadow:0 0 0 0 rgba(63,107,76,.45)}50%{box-shadow:0 0 0 12px rgba(63,107,76,0)}}
 @media(prefers-reduced-motion:reduce){.gr-go{animation:none}}
 @media(max-width:600px){.gr-page{padding-top:12px}.gr-card{padding:20px 20px 26px;border-radius:24px}.gr-stage{max-width:210px}.gr-card h1{font-size:32px;margin:4px 0 10px}.gr-wish{font-size:16px;margin-bottom:14px}.gr-actions{gap:10px}}
+.g-summary{margin:0 0 14px;font-size:15px;color:var(--muted)}.g-summary b{color:var(--navy)}.g-summary a{color:inherit}.g-stars{font-size:15px}.g-author{display:inline-flex;align-items:center;gap:8px}.g-author img{width:28px;height:28px;border-radius:50%;object-fit:cover}.g-card figcaption a{color:inherit}.g-card figcaption span a{text-decoration:underline}[data-theme=dark] .g-summary b{color:#e8efe9}

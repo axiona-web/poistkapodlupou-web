@@ -101,7 +101,19 @@ function aboutPage(){
 
 const reviewEsc=t=>String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const REVIEW_AREAS=['Poistenie auta','Dom a domácnosť','Cestovné poistenie','Životné poistenie','Iné poistenie','Hypotéka alebo úver','Sporenie alebo dôchodok'];
-function reviewCards(list){const card=(r,clone)=>`<figure class="review-card"${clone?' aria-hidden="true"':''}><blockquote>„${reviewEsc(r.text)}“</blockquote><figcaption><b>${reviewEsc(r.name)}</b>${r.city?` · ${reviewEsc(r.city)}`:''}<span>${reviewEsc(r.area||'')}</span></figcaption></figure>`;
+// Google reviews come live from the worker and must credit the author and link to the review on Google Maps.
+const gStars=n=>`<div class="review-stars g-stars" aria-label="${n} z 5 hviezdičiek">${'★'.repeat(Math.round(n))}<span>${'★'.repeat(5-Math.round(n))}</span></div>`;
+const safeUrl=u=>/^https:\/\//.test(u||'')?reviewEsc(u):'';
+function googleCard(r,clone){const av=r.photo?`<img src="${REVIEWS_API}/public/google-avatar?u=${encodeURIComponent(r.photo)}" alt="" width="28" height="28" loading="lazy">`:'';const name=safeUrl(r.authorUri)?`<a href="${safeUrl(r.authorUri)}" target="_blank" rel="noopener">${reviewEsc(r.author)}</a>`:reviewEsc(r.author);
+ return `<figure class="review-card g-card"${clone?' aria-hidden="true"':''}>${gStars(r.rating)}<blockquote>„${reviewEsc(r.text)}“</blockquote><figcaption><b class="g-author">${av}${name}</b>${r.when?` · ${reviewEsc(r.when)}`:''}<span>${safeUrl(r.link)?`<a href="${safeUrl(r.link)}" target="_blank" rel="noopener">Recenzia na Google Maps</a>`:'Google Maps'}</span></figcaption></figure>`;}
+// Our reviews first time, then (once the list is on screen) the Google ones are added into the same strip.
+function loadGoogleReviews(el,own,done){if(typeof REVIEWS_API==='undefined'||!('IntersectionObserver' in window))return;
+ const go=()=>fetch(REVIEWS_API+'/public/google-reviews',{credentials:'omit'}).then(r=>r.ok?r.json():{reviews:[]}).then(g=>{if(!document.body.contains(el)||!g.reviews?.length&&!g.count)return;
+  const all=[...g.reviews.map(r=>({...r,g:true})),...own];const sum=g.count?`<p class="g-summary">Hodnotenie na Google Maps: <b>${String(g.rating.toFixed(1)).replace('.',',')}</b> z 5 · ${g.count} ${g.count===1?'recenzia':g.count<5?'recenzie':'recenzií'}${safeUrl(g.url)?` · <a href="${safeUrl(g.url)}" target="_blank" rel="noopener">Zobraziť na Google Maps</a>`:''}</p>`:'';
+  el.innerHTML=sum+reviewCards(all);bindReviewCarousel(el);done&&done();}).catch(()=>{});
+ const target=el.offsetParent?el:el.closest('section')?.previousElementSibling||el.parentElement;
+ const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();go();}},{rootMargin:'300px'});io.observe(target);}
+function reviewCards(list){const card=(r,clone)=>r.g?googleCard(r,clone):`<figure class="review-card"${clone?' aria-hidden="true"':''}><blockquote>„${reviewEsc(r.text)}“</blockquote><figcaption><b>${reviewEsc(r.name)}</b>${r.city?` · ${reviewEsc(r.city)}`:''}<span>${reviewEsc(r.area||'')}</span></figcaption></figure>`;
  if(!list.length)return `<div class="review-empty"><img src="assets/life.svg" alt="" width="300" height="200"><div><h2>Prvé slová zbierame.</h2><p>Táto stránka je nová. Ak sme vám už pomohli, budeme radi, keď sa podelíte o svoju skúsenosť ako prví.</p></div></div>`;
  if(list.length<=3)return `<div class="review-grid">${list.map(r=>card(r)).join('')}</div>`;
  // More than three: one row that keeps moving slowly in a loop (the list is repeated once for a seamless loop).
@@ -131,7 +143,7 @@ function bindReviewCarousel(root){const m=root.querySelector('.review-marquee');
  size();addEventListener('resize',size);}
 function bindReviews(){
  const listEl=document.querySelector('#review-list');
- if(listEl&&typeof REVIEWS_API!=='undefined'){fetch(REVIEWS_API+'/reviews',{credentials:'omit'}).then(r=>r.ok?r.json():[]).then(remote=>{if(!document.body.contains(listEl))return;const all=[...remote,...(typeof REVIEWS!=='undefined'?REVIEWS:[])];if(all.length){listEl.innerHTML=reviewCards(all);bindReviewCarousel(listEl);}}).catch(()=>{});bindReviewCarousel(listEl);}
+ if(listEl&&typeof REVIEWS_API!=='undefined'){fetch(REVIEWS_API+'/reviews',{credentials:'omit'}).then(r=>r.ok?r.json():[]).then(remote=>{if(!document.body.contains(listEl))return;const all=[...remote,...(typeof REVIEWS!=='undefined'?REVIEWS:[])];if(all.length){listEl.innerHTML=reviewCards(all);bindReviewCarousel(listEl);}loadGoogleReviews(listEl,all);}).catch(()=>{});bindReviewCarousel(listEl);}
  const form=document.querySelector('#review-form');if(!form)return;
  const result=document.querySelector('#review-result');
  form.onsubmit=async e=>{e.preventDefault();if(!form.reportValidity())return;const d=new FormData(form);const button=form.querySelector('button[type=submit]');
