@@ -91,6 +91,8 @@ document.addEventListener('click',e=>{if(e.defaultPrevented||e.button!==0||e.met
  if(/\.[a-z0-9]+$/i.test(url.pathname)||url.pathname.startsWith('/formular'))return;
  e.preventDefault();navigate((url.pathname.endsWith('/')||url.pathname==='/'?url.pathname:url.pathname+'/')+url.search);});
 window.addEventListener('popstate',()=>{render();main.focus({preventScroll:true});});render();
+/* Anonymous count of where visitors come from (source.js). One request per landing, no cookies, no personal data. */
+if(typeof VISIT_SOURCE!=='undefined'&&VISIT_SOURCE.landing&&VISIT_SOURCE.label&&typeof REVIEWS_API!=='undefined'&&!/^\/(admin|[a-z-]+-sprava|gratulacia|podpis|formular)\b/.test(location.pathname)&&!/bot|crawl|spider|headless|lighthouse/i.test(navigator.userAgent))try{fetch(REVIEWS_API+'/public/visit',{method:'POST',credentials:'omit',keepalive:true,headers:{'Content-Type':'text/plain'},body:JSON.stringify({s:VISIT_SOURCE.label})}).catch(()=>{});}catch{}
 
 // Sections fade in as they scroll into view; the "how it works" animation plays only while visible.
 var revealObserver;

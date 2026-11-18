@@ -34,8 +34,8 @@ function applyCookieChoice(finportal) {
   }
 }
 
-const LEGAL_UPDATED='2. 11. 2026';
-const PRIVACY_UPDATED='17. 11. 2026';
+const LEGAL_UPDATED='18. 11. 2026';
+const PRIVACY_UPDATED='18. 11. 2026';
 const legalTable=(head,rows)=>`<div class="legal-table-wrap"><table class="legal-table"><thead><tr>${head.map(h=>`<th scope="col">${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map((c,i)=>i?`<td data-label="${head[i]}">${c}</td>`:`<th scope="row">${c}</th>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 
 function cookiesPage() {
@@ -43,10 +43,11 @@ function cookiesPage() {
    ['poistka-theme','Zapamätá si svetlý alebo tmavý motív.','Nevyhnutné (vaša voľba)','Do zmeny alebo vymazania údajov prehliadača'],
    ['poistka-privacy-v1','Zapamätá si, či ste povolili kalkulačky Finportalu.','Nevyhnutné (vaša voľba)','180 dní'],
    ['Cloudflare Web Analytics','Anonymne spočíta návštevy a zobrazené stránky, aby sme vedeli, čo na webe funguje. Nepoužíva cookies ani úložisko prehliadača.','Bez súhlasu – neukladá nič do vášho zariadenia','Iba súhrnné štatistiky; jednotlivých návštevníkov nerozlišuje'],
+   ['Zdroj návštevy','Pri otvorení webu zistí z odkazu alebo predchádzajúcej stránky, odkiaľ ste prišli (napr. Google, Facebook, naša reklama), a pripočíta jednu návštevu k súhrnnému počtu. Pri odoslaní správy alebo auditu sa pripojí rovnaký štítok.','Bez súhlasu – neukladá nič do vášho zariadenia, drží sa len v otvorenej stránke','Iba súhrnné mesačné počty; nespája sa s IP adresou ani so zariadením'],
    ['Cloudflare Turnstile','Overí, že žiadosť o overovací kód posiela človek, nie robot. Načíta sa len pri overení e-mailu v Audite poistky.','Nevyhnutné (bezpečnosť služby)','Podľa pravidiel Cloudflare; nepoužíva sa na reklamu ani sledovanie'],
    ['Finportal (iframe a skript)','Zobrazí finančné kalkulačky priamo na stránke Kalkulačky a prispôsobí ich výšku.','Tretia strana, iba so súhlasom','Podľa pravidiel Finportalu']
   ];
-  return article('Cookies a ukladanie v prehliadači', `<p class="lead">Na webe nepoužívame reklamné ani analytické cookies a nesledujeme vás. Návštevnosť meriame anonymne cez Cloudflare Web Analytics, bez cookies a bez ukladania čohokoľvek do vášho prehliadača. V prehliadači si ukladáme iba dve vaše voľby. Kalkulačky tretej strany načítame až po vašom súhlase. Pri overení e-mailu použijeme ochranu Cloudflare Turnstile.</p>
+  return article('Cookies a ukladanie v prehliadači', `<p class="lead">Na webe nepoužívame reklamné ani analytické cookies a nesledujeme vás. Návštevnosť meriame anonymne cez Cloudflare Web Analytics a počítame, odkiaľ návštevy prichádzajú, bez cookies a bez ukladania čohokoľvek do vášho prehliadača. V prehliadači si ukladáme iba dve vaše voľby. Kalkulačky tretej strany načítame až po vašom súhlase. Pri overení e-mailu použijeme ochranu Cloudflare Turnstile.</p>
   <h2>Čo ukladáme</h2>${legalTable(['Názov','Na čo slúži','Typ','Ako dlho'],rows)}
   <p>Obe naše položky ukladáme do lokálneho úložiska prehliadača (localStorage), nie do klasických cookies. Neodchádzajú na žiadny server a nevidíme ich.</p>
   <h2>Kalkulačky Finportalu</h2><p>Finančné kalkulačky prevádzkuje Finportal, a. s. Ak ich povolíte, prehliadač sa pri otvorení stránky Kalkulačky spojí so serverom Finportalu. Ten dostane technické údaje o pripojení vrátane IP adresy a môže používať vlastné cookies. Údaje, ktoré do kalkulačky zadáte, spracúva Finportal podľa svojich pravidiel. Ak kalkulačky nepovolíte, môžete ich otvoriť samostatným odkazom na webe Finportalu.</p>
@@ -60,7 +61,7 @@ function privacyPage() {
   const purposes=[
    ['Zobrazenie webu','IP adresa, typ prehliadača, čas požiadavky','Oprávnený záujem na bezpečnej prevádzke webu, čl. 6 ods. 1 písm. f)','Krátkodobé technické záznamy poskytovateľa hostingu'],
    ['Vaše nastavenia','Voľba motívu a súhlasu s kalkulačkami, iba vo vašom prehliadači','Nevyhnutné pre fungovanie webu','Pozri <a href="/cookies">Cookies</a>'],
-   ['Odpoveď na vašu otázku (e-mail, kontaktný formulár)','Meno, e-mail, telefón, téma a obsah správy','Opatrenia pred uzavretím zmluvy na vašu žiadosť, čl. 6 ods. 1 písm. b)','1 rok od poslednej komunikácie, ak nevznikne zmluvný vzťah'],
+   ['Odpoveď na vašu otázku (e-mail, kontaktný formulár)','Meno, e-mail, telefón, téma a obsah správy, zdroj návštevy (napr. Google, Facebook, reklama)','Opatrenia pred uzavretím zmluvy na vašu žiadosť, čl. 6 ods. 1 písm. b)','1 rok od poslednej komunikácie, ak nevznikne zmluvný vzťah'],
    ['Dopyt na životné poistenie','Vek, pracovné postavenie, druh práce, želané krytie a rozpočet, ak nám ich pošlete e-mailom','Opatrenia pred uzavretím zmluvy na vašu žiadosť, čl. 6 ods. 1 písm. b)','1 rok od poslednej komunikácie, ak nevznikne zmluvný vzťah'],
    ['Dotazník k životnému poisteniu (na pozvanie, spracúva Mgr. Alexandra Čurillová, s. r. o.)','Osobné údaje, zamestnanie a príjem, finančné záväzky, zdravotný stav, požadované krytie, kontakt','Váš výslovný súhlas, čl. 6 ods. 1 písm. a) a čl. 9 ods. 2 písm. a); príprava návrhu na vašu žiadosť, čl. 6 ods. 1 písm. b)','Na webe sa neukladá; e-mail 1 rok od poslednej komunikácie, ak nevznikne zmluvný vzťah'],['Krátky audit poistky (dotazník)','Odpovede a sumy, ktoré zadáte','Kým prehľad sami neodošlete, zostáva iba v otvorenej stránke','Do zatvorenia alebo opustenia auditu'],['Pomocník pri poistnej udalosti, porovnanie zmlúv a otázky k podmienkam','Opis udalosti, vybraná poisťovňa, nahrané dokumenty (zmluva, ponuka), údaje z nich prečítané, otázky; overený e-mail','Váš súhlas, čl. 6 ods. 1 písm. a); spracúva sa na vašu žiadosť cez službu Anthropic','Dokumenty ani výsledky neukladáme; zostávajú len vo vašom prehliadači, kým ich sami nepošlete Alexandre'],['Odoslanie prehľadu auditu na kontrolu','Meno, e-mail, telefón, poznámka, typ zmluvy, poisťovňa, potvrdené údaje zo zmluvy a odpovede','Váš súhlas a opatrenia pred uzavretím zmluvy na vašu žiadosť, čl. 6 ods. 1 písm. a) a b)','1 rok od poslednej komunikácie, ak nevznikne zmluvný vzťah'],
    ['Čítanie nahratej zmluvy','Súbor, ktorý vyberiete, a typ poistenia','Váš súhlas, čl. 6 ods. 1 písm. a)','Dokument neukladáme; spracuje sa iba počas čítania'],

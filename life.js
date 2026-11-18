@@ -67,7 +67,7 @@ function bindLife() {
     }
     btn.disabled = true; out.className = ''; out.textContent = 'Odosielam…';
     try {
-      const r = await fetch(REVIEWS_API + '/contact', { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.value, email: email.value, phone: form.elements.cphone.value, topic: 'Životné poistenie', message: form.dataset.body || 'Záujem o konzultáciu k životnému poisteniu.', website: form.elements.website.value }) });
+      const r = await fetch(REVIEWS_API + '/contact', { method: 'POST', credentials: 'omit', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: name.value, email: email.value, phone: form.elements.cphone.value, topic: 'Životné poistenie', message: form.dataset.body || 'Záujem o konzultáciu k životnému poisteniu.', website: form.elements.website.value, src:typeof VISIT_SOURCE!=='undefined'?VISIT_SOURCE.label:'' }) });
       if (r.ok) { out.className = 'ok'; out.textContent = 'Odoslané. Alexandra sa vám ozve spravidla do jedného pracovného dňa.'; btn.hidden = true; }
       else { out.className = 'err'; out.innerHTML = r.status === 429 ? 'Dnes ste nám už poslali viac správ. Napíšte prosím na <a href="mailto:ahoj@poistkapodlupou.sk">ahoj@poistkapodlupou.sk</a>.' : 'Odoslanie sa nepodarilo. Napíšte prosím na <a href="mailto:ahoj@poistkapodlupou.sk">ahoj@poistkapodlupou.sk</a>.'; }
     } catch { out.className = 'err'; out.textContent = 'Spojenie zlyhalo. Skúste to znova.'; }
